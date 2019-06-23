@@ -1,0 +1,30 @@
+{
+  "name": "visuall-css-comparison",
+  "version": "0.0.1",
+  "description": "Replace css with local file then do the screenshot comparison",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "log-timestamp": "^0.3.0",
+    "md5": "^2.2.1",
+    "micromatch": "^4.0.2",
+    "puppeteer": "^1.18.0",
+    "timestamp-nano": "^1.0.0",
+    "uncss": "^0.17.0"
+  },
+  "devDependencies": {
+    "@types/puppeteer": "^1.12.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sengfan/Visual-CSS-Comparison.git"
+  },
+  "author": "Zhou Fang, sengfan@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sengfan/Visual-CSS-Comparison/issues"
+  },
+  "homepage": "https://github.com/sengfan/Visual-CSS-Comparison#readme"
+}

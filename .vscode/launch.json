@@ -1,0 +1,46 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+
+    "version": "0.2.0",
+    "configurations": [
+
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "launch webpack",
+            "program": "C:\\git\\uber\\Mobile\\node_modules/webpack/bin/webpack.js",
+            "args": ["--progress", "--config", "C:\\git\\uber\\Mobile\\webpack.dev.js", "--env.site=cb2"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "launch webpack-dev-server",
+            "program": "C:\\git\\uber\\Mobile\\node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+            "args": ["--progress", "--inline", "--config", "C:\\git\\uber\\Mobile\\webpack.dev.js", "--env.site=cb2"]
+        },
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch copy",
+            "program": "${workspaceFolder}\\copy.webpack.js"
+        },
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch uncss",
+            "program": "${workspaceFolder}\\uncss\\loader.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch screen QA",
+            "program": "${workspaceFolder}\\dist\\qa_loader.js"
+        }
+
+    ]
+}
