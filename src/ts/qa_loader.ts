@@ -6,25 +6,50 @@
  */
 import * as puppeteer from 'puppeteer';
 import * as micromatch from 'micromatch';
-const urlList: string[] = [];
-re
+interface UrlList {
+    url: string;
+    replaceRequests: string[];
+    executeScript: string[];
+}
 
+class Config {
+    constructor(
+        public compare = true,
+        public allPhoto = true,
+        public urlLists: UrlList[]
+    ) {}
+}
+export class VisualCssComparison {
+    constructor(private config: Config) {}
+    proxyFilter(request: string): boolean | string {
+        return true;
+    }
+    replaceRequest(): string {
+        return '123';
+    }
+    compareImage() {}
 
-const proxyFilter = (url: string): boolean => {
-    const urlList =;
-};
+    async run() {
+        const browser = await puppeteer.launch({ headless: false });
 
-(async () => {
-    const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
-    await page.setRequestInterception(true);
-    page.on('request', interceptedRequest => {
-        if (interceptedRequest.url().endsWith('.png') || interceptedRequest.url().endsWith('.jpg')) interceptedRequest.abort();
-        else interceptedRequest.continue();
-    });
-    await page.goto('https://example.com');
+        const eachPage = async urlList => {
+            const page = await browser.newPage();
 
-    
-    await page.screenshot({ path: 'example.png' });
-    await browser.close();
-})();
+            await page.setRequestInterception(true);
+            page.on('request', interceptedRequest => {
+                const result = this.proxyFilter(interceptedRequest.url());
+                if (result === true) {
+                    interceptedRequest.continue();
+                } else if (result === false) {
+                    interceptedRequest.abort();
+                } else if (typeof result === 'string') {
+                    interceptedRequest.continue({ url: result });
+                } else throw new Error('proxy Filter result is not right');
+            });
+            await page.goto('https://example.com');
+
+            await page.screenshot({ path: 'example.png' });
+            await browser.close();
+        };
+    }
+}

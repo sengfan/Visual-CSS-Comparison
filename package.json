@@ -1,5 +1,5 @@
 {
-  "name": "visuall-css-comparison",
+  "name": "visual-css-comparison",
   "version": "0.0.1",
   "description": "Replace css with local file then do the screenshot comparison",
   "main": "index.js",
