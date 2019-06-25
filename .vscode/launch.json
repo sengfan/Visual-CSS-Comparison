@@ -39,7 +39,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch screen QA",
-            "program": "${workspaceFolder}\\dist\\qa_loader.js"
+            "program": "${workspaceFolder}\\dist\\example\\QaDemo.js"
         }
 
     ]

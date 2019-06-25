@@ -1,6 +1,6 @@
-import { Config } from './model/Config';
-import { UrlList } from './model/UrlList';
-import { WildCardReplaceRequests } from './model/WildCardReplaceRequests';
+import { Config } from '../src/model/Config';
+import { UrlList } from '../src/model/UrlList';
+import { WildCardReplaceRequests } from '../src/model/WildCardReplaceRequests';
 
 const searchAreaCssList = [
     '/**/search.xs.css',
@@ -14,7 +14,7 @@ const searchAreaCssList = [
 const urlList: UrlList = {
     url: ['http://www.crateandbarrel.com'],
     replaceRequests: {
-        requestUrls: searchAreaCssList,
+        redirectURLs: searchAreaCssList,
         redirectDomain: 'http://trunk-www.crateandbarrel.com'
     }
 };
