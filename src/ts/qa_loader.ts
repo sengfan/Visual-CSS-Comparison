@@ -6,19 +6,11 @@
  */
 import * as puppeteer from 'puppeteer';
 import * as micromatch from 'micromatch';
-interface UrlList {
-    url: string;
-    replaceRequests: string[];
-    executeScript: string[];
-}
+import { WildCardReplaceRequests } from './model/WildCardReplaceRequests';
+import { Config } from './model/Config';
 
-class Config {
-    constructor(
-        public compare = true,
-        public allPhoto = true,
-        public urlLists: UrlList[]
-    ) {}
-}
+const config = new Config();
+
 export class VisualCssComparison {
     constructor(private config: Config) {}
     proxyFilter(request: string): boolean | string {
