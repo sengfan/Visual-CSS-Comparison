@@ -31,8 +31,8 @@ export class VisualCssComparison {
                     Array.isArray(replaceRequests[key])
                 )
             ) {
-              //  console.error(`illegal replaceRequests.${key}`);
-                return false
+                //  console.error(`illegal replaceRequests.${key}`);
+                return false;
             }
             return true;
         };
@@ -91,12 +91,20 @@ export class VisualCssComparison {
             await page.screenshot({ path: 'example.png' });
             await page.close();
         };
+
+        const progress$ = this.config.urlLists.flatMap(urlList => {
+            const singleProgress = urlList.url.map(url =>
+                from(eachPageProgress(url, urlList.replaceRequests))
+            );
+            return singleProgress;
+        });
+        console.log(progress$);
         this.config.urlLists.forEach(urlList => {
             urlList.url.forEach(url => {
                 eachPageProgress(url, urlList.replaceRequests);
             });
         });
 
-       // await browser.close();
+        // await browser.close();
     }
 }

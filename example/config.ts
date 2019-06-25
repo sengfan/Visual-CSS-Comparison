@@ -12,7 +12,7 @@ const searchAreaCssList = [
 ];
 
 const urlList: UrlList = {
-    url: ['http://www.crateandbarrel.com'],
+    url: ['https://www.crateandbarrel.com','https://www.cb2.com'],
     replaceRequests: {
         redirectURLs: searchAreaCssList,
         redirectDomain: 'http://trunk-www.crateandbarrel.com'
