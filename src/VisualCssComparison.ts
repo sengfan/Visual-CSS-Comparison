@@ -2,16 +2,27 @@
  * @Author: Zhou Fang
  * @Date: 2019-06-21 15:38:57
  * @Last Modified by: Zhou Fang
- * @Last Modified time: 2019-06-24 23:22:09
+ * @Last Modified time: 2019-06-25 17:26:31
  */
 import * as puppeteer from 'puppeteer';
 import * as micromatch from 'micromatch';
 import { WildCardReplaceRequests } from './model/WildCardReplaceRequests';
 import { from } from 'rxjs';
 import { Config } from './model/Config';
+import * as moment from 'moment';
+import * as fs from 'fs';
 
 export class VisualCssComparison {
-    constructor(public config: Config) {}
+    config: Config = {
+        urlLists: undefined,
+        compare: true,
+        allPhoto: true,
+        mockDevice: ['iPhone X', 'desktop'],
+        fileSavePath: './output'
+    };
+    constructor(config: Config) {
+        if (config) this.setConfig(config);
+    }
     /**
      * @date 2019-06-24
      * @param {puppeteer.Request} request
@@ -19,18 +30,12 @@ export class VisualCssComparison {
      * @returns {(boolean | string)}
      * @memberof VisualCssComparison
      */
-    proxyFilter(
-        request: puppeteer.Request,
-        replaceRequests: WildCardReplaceRequests
-    ): boolean | string {
+    setConfig(config: Config) {
+        this.config = { ...this.config, ...config };
+    }
+    proxyFilter(request: puppeteer.Request, replaceRequests: WildCardReplaceRequests): boolean | string {
         const isLegal = (key: string) => {
-            if (
-                !(
-                    replaceRequests &&
-                    replaceRequests[key] &&
-                    Array.isArray(replaceRequests[key])
-                )
-            ) {
+            if (!(replaceRequests && replaceRequests[key] && Array.isArray(replaceRequests[key]))) {
                 //  console.error(`illegal replaceRequests.${key}`);
                 return false;
             }
@@ -64,41 +69,46 @@ export class VisualCssComparison {
 
     compareImage() {}
 
+    creatFolderPath(url, device?: string) {
+        const Timestamp = moment().format('YYYYMMDD');
+        const folderName = new URL(url).pathname.split('/').join('-');
+        const path = `${this.config.fileSavePath}/${Timestamp}/${folderName}/${device?device:''}`;
+        fs.mkdirSync(path);
+        return path;
+    }
     async run() {
         const browser = await puppeteer.launch({ headless: false });
-
-        const eachPageProgress = async (
-            url,
-            replaceRequests: WildCardReplaceRequests
-        ) => {
+        const eachPageProgress = async (url, replaceRequests: WildCardReplaceRequests) => {
+            const _url = new URL(url);
+            let afterFix: string;
+              
             const page = await browser.newPage();
-            await page.setRequestInterception(true);
-            page.on('request', interceptedRequest => {
-                const result = this.proxyFilter(
-                    interceptedRequest,
-                    replaceRequests
-                );
-                if (result === true) {
-                    interceptedRequest.continue();
-                } else if (result === false) {
-                    interceptedRequest.abort();
-                } else if (typeof result === 'string') {
-                    interceptedRequest.continue({ url: result });
-                } else throw new Error('proxy Filter result is not right');
-            });
+            const page$ = from(browser.newPage());
+            if (replaceRequests !== undefined) {
+                await page.setRequestInterception(true);
+                page.on('request', interceptedRequest => {
+                    const result = this.proxyFilter(interceptedRequest, replaceRequests);
+                    if (result === true) {
+                        interceptedRequest.continue();
+                    } else if (result === false) {
+                        interceptedRequest.abort();
+                    } else if (typeof result === 'string') {
+                        interceptedRequest.continue({ url: result });
+                    } else throw new Error('proxy Filter result is not right');
+                });
+                afterFix = 'modified';
+            }
+            const photoName = `${(url.search + url.hash).split(/[/?#=]/).join('-')}${'-'+afterFix}`;
             await page.goto(url);
-
-            await page.screenshot({ path: 'example.png' });
+            await page.screenshot({ path: `${this.creatFolderPath(url)}${photoName}` });
             await page.close();
         };
 
-        const progress$ = this.config.urlLists.flatMap(urlList => {
-            const singleProgress = urlList.url.map(url =>
-                from(eachPageProgress(url, urlList.replaceRequests))
-            );
+         const progress$ = this.config.urlLists.flatMap(urlList => {
+            const singleProgress = urlList.url.map(url => from(eachPageProgress(url, urlList.replaceRequests)));
             return singleProgress;
         });
-        console.log(progress$);
+        console.log(progress$); 
         this.config.urlLists.forEach(urlList => {
             urlList.url.forEach(url => {
                 eachPageProgress(url, urlList.replaceRequests);
