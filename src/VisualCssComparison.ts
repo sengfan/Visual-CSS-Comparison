@@ -2,7 +2,7 @@
  * @Author: Zhou Fang
  * @Date: 2019-06-21 15:38:57
  * @Last Modified by: Zhou Fang
- * @Last Modified time: 2019-06-25 17:26:31
+ * @Last Modified time: 2019-06-25 19:46:05
  */
 import * as puppeteer from 'puppeteer';
 import * as micromatch from 'micromatch';
@@ -11,6 +11,7 @@ import { from } from 'rxjs';
 import { Config } from './model/Config';
 import * as moment from 'moment';
 import * as fs from 'fs';
+import 'ts-polyfill/lib/es2019-array';
 
 export class VisualCssComparison {
     config: Config = {
@@ -83,7 +84,6 @@ export class VisualCssComparison {
             let afterFix: string;
               
             const page = await browser.newPage();
-            const page$ = from(browser.newPage());
             if (replaceRequests !== undefined) {
                 await page.setRequestInterception(true);
                 page.on('request', interceptedRequest => {
@@ -104,11 +104,11 @@ export class VisualCssComparison {
             await page.close();
         };
 
-         const progress$ = this.config.urlLists.flatMap(urlList => {
+  /*        const progress$ = this.config.urlLists.flatMap(urlList => {
             const singleProgress = urlList.url.map(url => from(eachPageProgress(url, urlList.replaceRequests)));
             return singleProgress;
-        });
-        console.log(progress$); 
+        }); */
+   /*      console.log(progress$);  */
         this.config.urlLists.forEach(urlList => {
             urlList.url.forEach(url => {
                 eachPageProgress(url, urlList.replaceRequests);
