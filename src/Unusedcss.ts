@@ -2,7 +2,7 @@
  * @Author: Zhou Fang
  * @Date: 2019-06-28 15:51:36
  * @Last Modified by: Zhou Fang
- * @Last Modified time: 2019-06-28 21:04:31
+ * @Last Modified time: 2019-06-28 22:17:49
  */
 
 import * as puppeteer from 'puppeteer';
@@ -19,6 +19,7 @@ const util = require('util');
 
 
 (async () => {
+    try{
  const browser = await puppeteer.launch();
  const page = await browser.newPage();
  await page.coverage.startCSSCoverage();
@@ -37,7 +38,13 @@ for (const entry of css_coverage) {
     final_css_bytes += entry.text.slice(range.start, range.end) + '\n';
   }
 }
-fs.writeFile('./report.json',report)
+fs.writeFile('./report.json',report error => {
+    if (error) {
+      console.log('Error creating report:', error);
+    } else {
+      console.log('report saved');
+    }
+  })
 
 
 fs.writeFile('./final_css.css', final_css_bytes, error => {
@@ -48,7 +55,12 @@ fs.writeFile('./final_css.css', final_css_bytes, error => {
   }
 });
  await browser.close();
+}catch(e){
+    console.log(e)
+}
 })();
 
 
+
+//4294967296
 
