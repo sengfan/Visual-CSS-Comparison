@@ -40,7 +40,14 @@
             "request": "launch",
             "name": "Launch screen QA",
             "program": "${workspaceFolder}\\dist\\example\\QaDemo.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch puppeteer unused css",
+            "program": "${workspaceFolder}\\dist\\src\\Unusedcss.js"
         }
+
 
     ]
 }

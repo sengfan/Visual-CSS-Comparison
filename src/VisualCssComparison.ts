@@ -2,7 +2,7 @@
  * @Author: Zhou Fang
  * @Date: 2019-06-21 15:38:57
  * @Last Modified by: Zhou Fang
- * @Last Modified time: 2019-06-25 22:58:28
+ * @Last Modified time: 2019-06-26 23:19:55
  */
 import * as puppeteer from 'puppeteer';
 import * as micromatch from 'micromatch';
@@ -34,18 +34,9 @@ export class VisualCssComparison {
     setConfig(config: Config) {
         this.config = { ...this.config, ...config };
     }
-    proxyFilter(
-        request: puppeteer.Request,
-        replaceRequests: WildCardReplaceRequests
-    ): boolean | string {
+    proxyFilter(request: puppeteer.Request, replaceRequests: WildCardReplaceRequests): boolean | string {
         const isLegal = (key: string) => {
-            if (
-                !(
-                    replaceRequests &&
-                    replaceRequests[key] &&
-                    Array.isArray(replaceRequests[key])
-                )
-            ) {
+            if (!(replaceRequests && replaceRequests[key] && Array.isArray(replaceRequests[key]))) {
                 //  console.error(`illegal replaceRequests.${key}`);
                 return false;
             }
@@ -82,20 +73,15 @@ export class VisualCssComparison {
     creatFolderPath(url, device?: string) {
         const Timestamp = moment().format('YYYYMMDD');
         const folderName = new URL(url).pathname.split('/').join('-');
-        const path = `${this.config.fileSavePath}${Timestamp}${
-            device ? '/' + device : ''
-        }`;
+        const path = `${this.config.fileSavePath}${Timestamp}${device ? '/' + device : ''}`;
         console.log(path);
         fs.mkdirSync(path, { recursive: true });
         return path;
     }
     async run() {
         try {
-            const browser = await puppeteer.launch({ headless: false });
-            const eachPageProgress = async (
-                url,
-                replaceRequests: WildCardReplaceRequests
-            ) => {
+            const browser = await puppeteer.launch({ headless: false, defaultViewport: null });
+            const eachPageProgress = async (url, replaceRequests: WildCardReplaceRequests) => {
                 const _url = new URL(url);
                 let afterFix: string;
 
@@ -103,30 +89,25 @@ export class VisualCssComparison {
                 if (replaceRequests !== undefined) {
                     await page.setRequestInterception(true);
                     page.on('request', interceptedRequest => {
-                        const result = this.proxyFilter(
-                            interceptedRequest,
-                            replaceRequests
-                        );
+                        const result = this.proxyFilter(interceptedRequest, replaceRequests);
                         if (result === true) {
                             interceptedRequest.continue();
                         } else if (result === false) {
                             interceptedRequest.abort();
                         } else if (typeof result === 'string') {
                             interceptedRequest.continue({ url: result });
-                        } else
-                            throw new Error('proxy Filter result is not right');
+                        } else throw new Error('proxy Filter result is not right');
                     });
                     afterFix = 'modified';
                 }
 
-                const photoName = `${_url.hostname}-${_url.pathname
-                    .split('/')
-                    .join('-')}-${(_url.search + _url.hash)
+                const photoName = `${_url.hostname}-${_url.pathname.split('/').join('-')}-${(_url.search + _url.hash)
                     .split(/[/?#=]/)
                     .join('-')}${'-' + afterFix}.png`;
                 await page.goto(url);
                 await page.screenshot({
-                    path: `${this.creatFolderPath(url)}/${photoName}`
+                    path: `${this.creatFolderPath(url)}/${photoName}`,
+                    fullPage: true
                 });
                 await page.close();
             };
