@@ -1,2 +1,7 @@
 node_modules/**
 dist/**
+output/**
+example/**
+
+
+example/config.ts

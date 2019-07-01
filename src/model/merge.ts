@@ -16,7 +16,7 @@ const array2 = [
     { start: 971, end: 1034 }
 ];
 
-mergerRange = (allRanges, length) => {
+export const mergerRange = (allRanges, length) => {
     const list = new Array(length);
     allRanges.forEach(ranges =>
         ranges.forEach(range => {
@@ -25,7 +25,7 @@ mergerRange = (allRanges, length) => {
             }
         })
     );
-    getNewRange = () => {
+    const getNewRange = () => {
         const newRange = [];
         let start;
         let end;
@@ -35,7 +35,7 @@ mergerRange = (allRanges, length) => {
                 if (list[i]) {
                     start = i;
                 } else {
-                    end = i-1;
+                    end = i - 1;
                     newRange.push({ start: start, end: end });
                 }
                 pre = list[i];
@@ -46,6 +46,6 @@ mergerRange = (allRanges, length) => {
     return getNewRange();
 };
 
-let array3 = mergerRange([array1, array2]);
+let array3 = mergerRange([array1, array2], 1034);
 
 console.log(array3);
