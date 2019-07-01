@@ -12,6 +12,7 @@
     "micromatch": "^4.0.2",
     "moment": "^2.24.0",
     "puppeteer": "^1.18.0",
+    "puppeteer-core": "^1.18.1",
     "rxjs": "^6.5.2",
     "timestamp-nano": "^1.0.0",
     "ts-polyfill": "^3.5.1",

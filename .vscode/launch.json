@@ -46,6 +46,12 @@
             "request": "launch",
             "name": "Launch puppeteer unused css",
             "program": "${workspaceFolder}\\dist\\src\\Unusedcss.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch extact",
+            "program": "${workspaceFolder}\\dist\\example\\extract.js"
         }
 
 
