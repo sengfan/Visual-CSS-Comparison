@@ -2,7 +2,7 @@
  * @Author: Zhou Fang
  * @Date: 2019-06-28 15:51:36
  * @Last Modified by: Zhou Fang
- * @Last Modified time: 2019-07-01 17:38:59
+ * @Last Modified time: 2019-07-02 14:07:10
  */
 
 import * as puppeteer from 'puppeteer';
@@ -54,15 +54,13 @@ class AllCssCoverage {
 
 class UnusedCss {
     config = {
-        pageUrlList: spillAreaHousewaresPageUrlList,
-        cssList: spillAreaCssList,
-        fileName: 'crate-spill-Housewares-xs'
+       
     };
 
     cssNeedToExtract: string[] = [''];
     AllCoverageEntryList = {};
     generateFile() {
-        let fileName = `./output/unusedCss/${this.config.fileName}.css`;
+        let fileName = `./export/unusedCss/${this.config.fileName}.css`;
         let final_css_bytes = '';
         let total_bytes = 0;
         let used_bytes = 0;
@@ -93,7 +91,8 @@ class UnusedCss {
                  '--enable-remote-extensions',
                  '--user-data-dir'
              ], */
-            headless: false
+            headless: false,
+            defaultViewport: null
         };
         const browser = await puppeteer.launch(browserOptions);
         const eachPageProcedure = async (url: string, cssList: string[], device: Devices.Device = Devices['iPhone 6']) => {

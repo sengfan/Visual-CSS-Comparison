@@ -1,7 +1,8 @@
 node_modules/**
 dist/**
-output/**
+export/**
 example/**
 
 
 example/config.ts
+export/unusedCss/crate-md-us.css
