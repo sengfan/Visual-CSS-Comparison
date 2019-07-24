@@ -2,7 +2,7 @@
  * @Author: Zhou Fang
  * @Date: 2019-06-28 15:51:36
  * @Last Modified by: Zhou Fang
- * @Last Modified time: 2019-07-02 14:07:10
+ * @Last Modified time: 2019-07-24 16:08:51
  */
 
 import * as puppeteer from 'puppeteer';
@@ -14,7 +14,13 @@ import { Config } from './model/Config';
 import * as moment from 'moment';
 import * as fs from 'fs';
 import 'ts-polyfill/lib/es2019-array';
-import { config, searchAreaPageUrlList, searchAreaCssList, spillAreaHousewaresPageUrlList, spillAreaCssList } from '../example/config';
+import {
+    config,
+    searchAreaPageUrlList,
+    searchAreaCssList,
+    spillAreaHousewaresPageUrlList,
+    spillAreaCssList
+} from '../example/config';
 import { mergerRange } from './model/merge';
 
 const util = require('util');
@@ -54,12 +60,14 @@ class AllCssCoverage {
 
 class UnusedCss {
     config = {
-       
+        pageUrlList: searchAreaPageUrlList,
+        cssList: searchAreaCssList,
+        fileName: 'crate-xs-us'
     };
 
     cssNeedToExtract: string[] = [''];
     AllCoverageEntryList = {};
-    generateFile() {
+    generateCssFile() {
         let fileName = `./export/unusedCss/${this.config.fileName}.css`;
         let final_css_bytes = '';
         let total_bytes = 0;
@@ -69,7 +77,8 @@ class UnusedCss {
             total_bytes += entry.text.length;
             for (const range of entry.mergedRangeList) {
                 used_bytes += range.end - range.start - 1;
-                final_css_bytes += entry.text.slice(range.start, range.end) + '\n';
+                final_css_bytes +=
+                    entry.text.slice(range.start, range.end) + '\n';
             }
         });
         if (!fs.existsSync('./output/unusedCss')) {
@@ -95,9 +104,15 @@ class UnusedCss {
             defaultViewport: null
         };
         const browser = await puppeteer.launch(browserOptions);
-        const eachPageProcedure = async (url: string, cssList: string[], device: Devices.Device = Devices['iPhone 6']) => {
+        const eachPageProcedure = async (
+            url: string,
+            cssList: string[],
+            device?: Devices.Device //= Devices['iPhone 6']
+        ) => {
             const page = await browser.newPage();
-            await page.emulate(device);
+            if (device) {
+                await page.emulate(device);
+            }
             await page.goto(url);
             await page.coverage.startCSSCoverage();
             const css_coverage: puppeteer.CoverageEntry[] = await page.coverage.stopCSSCoverage();
@@ -109,18 +124,33 @@ class UnusedCss {
             css_coverage.forEach(coverageEntry => {
                 if (
                     cssList.some(cssFileWildCard => {
-                        const result = micromatch.isMatch(new URL(coverageEntry.url).pathname, cssFileWildCard);
+                        const result = micromatch.isMatch(
+                            new URL(coverageEntry.url).pathname,
+                            cssFileWildCard
+                        );
                         if (result) {
-                            console.log('\x1b[36m%s\x1b[0m', 'find Css file in list:', coverageEntry.url, cssFileWildCard);
+                            console.log(
+                                '\x1b[36m%s\x1b[0m',
+                                'find Css file in list:',
+                                coverageEntry.url,
+                                cssFileWildCard
+                            );
                         }
                         return result;
                     })
                 ) {
                     if (this.AllCoverageEntryList) {
-                        if (this.AllCoverageEntryList[coverageEntry.url] === undefined) {
-                            this.AllCoverageEntryList[coverageEntry.url] = new AllCssCoverage(coverageEntry);
+                        if (
+                            this.AllCoverageEntryList[coverageEntry.url] ===
+                            undefined
+                        ) {
+                            this.AllCoverageEntryList[
+                                coverageEntry.url
+                            ] = new AllCssCoverage(coverageEntry);
                         } else {
-                            this.AllCoverageEntryList[coverageEntry.url].add(coverageEntry);
+                            this.AllCoverageEntryList[coverageEntry.url].add(
+                                coverageEntry
+                            );
                         }
                     }
                 }
@@ -144,7 +174,7 @@ class UnusedCss {
         });
         console.log(this.AllCoverageEntryList);
         console.log('after merge', this.AllCoverageEntryList);
-        this.generateFile();
+        this.generateCssFile();
         browser.close();
     }
 }

@@ -52,7 +52,13 @@
             "request": "launch",
             "name": "Launch extact",
             "program": "${workspaceFolder}\\dist\\example\\extract.js"
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch merge",
+            "program": "${workspaceFolder}\\dist\\src\\Unusedcss.v2.js"
+        },
 
 
     ]
