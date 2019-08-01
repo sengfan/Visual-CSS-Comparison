@@ -1,7 +1,13 @@
 {
     "cSpell.words": [
+        "Xhrs",
         "YYYYMMDD",
+        "certifcate",
+        "dropdown",
         "micromatch",
-        "polyfill"
+        "networkidle",
+        "polyfill",
+        "requestfailed",
+        "requestfinished"
     ]
 }

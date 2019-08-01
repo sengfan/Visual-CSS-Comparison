@@ -1,0 +1,191 @@
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+
+    25% {
+        opacity: 0
+    }
+
+    100% {
+        opacity: 1
+    }
+}
+
+@-moz-keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+
+    25% {
+        opacity: 0
+    }
+
+    100% {
+        opacity: 1
+    }
+}
+
+@-o-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+
+    25% {
+        opacity: 0
+    }
+
+    100% {
+        opacity: 1
+    }
+}
+
+@keyframes displayNoneFadeIn {
+    0% {
+        opacity: 0;
+        max-height: 0;
+        height: 0;
+        visibility: hidden;
+        display: none
+    }
+
+    9% {
+        opacity: 0;
+        max-height: 0;
+        height: 0;
+        visibility: hidden;
+        display: none
+    }
+
+    10% {
+        opacity: 0;
+        max-height: 1000px;
+        height: auto;
+        display: block;
+        visibility: visible
+    }
+
+    100% {
+        opacity: 1;
+        max-height: 1000px;
+        height: auto;
+        display: block;
+        visibility: visible
+    }
+}
+
+@-webkit-keyframes displayNoneFadeIn {
+    0% {
+        opacity: 0;
+        max-height: 0;
+        height: 0;
+        visibility: hidden;
+        display: none
+    }
+
+    9% {
+        opacity: 0;
+        max-height: 0;
+        height: 0;
+        visibility: hidden;
+        display: none
+    }
+
+    10% {
+        opacity: 0;
+        max-height: 1000px;
+        height: auto;
+        display: block;
+        visibility: visible
+    }
+
+    100% {
+        opacity: 1;
+        max-height: 1000px;
+        height: auto;
+        display: block;
+        visibility: visible
+    }
+}
+
+@-moz-keyframes displayNoneFadeIn {
+    0% {
+        opacity: 0;
+        max-height: 0;
+        height: 0;
+        visibility: hidden;
+        display: none
+    }
+
+    9% {
+        opacity: 0;
+        max-height: 0;
+        height: 0;
+        visibility: hidden;
+        display: none
+    }
+
+    10% {
+        opacity: 0;
+        max-height: 1000px;
+        height: auto;
+        display: block;
+        visibility: visible
+    }
+
+    100% {
+        opacity: 1;
+        max-height: 1000px;
+        height: auto;
+        display: block;
+        visibility: visible
+    }
+}
+
+@-o-keyframes displayNoneFadeIn {
+    0% {
+        opacity: 0;
+        max-height: 0;
+        height: 0;
+        visibility: hidden;
+        display: none;
+    }
+
+    9% {
+        opacity: 0;
+        max-height: 0;
+        height: 0;
+        visibility: hidden;
+        display: none;
+    }
+
+    10% {
+        opacity: 0;
+        max-height: 1000px;
+        height: auto;
+        display: block;
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 1;
+        max-height: 1000px;
+        height: auto;
+        display: block;
+        visibility: visible;
+    }
+}
