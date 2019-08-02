@@ -76,7 +76,8 @@ type StepSequence = Map<
     SimpleStep | HoverStep | ClickStep | FocusStep | TypeStep
 >;
 
-class Actions {
+
+export class Actions {
     hoverSelectors: Selectors = {};
     focusSelectors: string[] = [];
 
@@ -487,10 +488,7 @@ const favAction = new Map()
         )
     )
     .set('close Store popup', new ClickStep('#popup-close'));
-const testActions = new Map().set(
-    'test',
-    new FocusStep('.header-store-link.header-store-link-locations')
-);
+
 export const testAction = new Actions();
 testAction.hoverSelectors = desktopHeaderMenuAction.selector;
 
@@ -588,6 +586,6 @@ testAction.stepSequencesMobileActions.push(
     focusAction,
     mobileFavAction,
     mobileFilterAction,
-    mobileHeaderAction,
+    mobileHeaderAction
 );
 //#primary-kids-navigation-items > li:nth-child(1)

@@ -25,7 +25,7 @@ import {
 import { mergerRange } from './model/merge';
 import { XhrWatcher } from './model/xhrWatcher';
 import { asyncForEach, delay } from './model/helper';
-import { testAction } from './model/Actions';
+import { testAction, Actions } from './model/Actions';
 
 const util = require('util');
 
@@ -55,13 +55,20 @@ class AllCssCoverage {
         }
     }
 }
+/**
+ * @description
+ * @class UnusedCss
+ */
+export class UnusedCss {
+    constructor(
+        public config: {
+            pageUrlList: string[];
+            cssList: string[];
+            fileName: string;
+            action?: Actions;
+        }
+    ) {}
 
-class UnusedCss {
-    config = {
-        pageUrlList: searchAreaPageUrlList,
-        cssList: searchAreaCssList,
-        fileName: 'crate-xs-us-qa'
-    };
     actionFinished = false;
     cssNeedToExtract: string[] = [''];
     AllCoverageEntryList = {};
@@ -116,7 +123,7 @@ class UnusedCss {
                 await page.emulate(device);
                 await delay(1000);
             }
-           
+
             await page.goto(url, {
                 waitUntil: 'networkidle2'
             });
@@ -172,18 +179,21 @@ class UnusedCss {
                     await page.coverage.startCSSCoverage(options);
                 }
             };
-             mergeCssCoverage = mergeCssCoverage.bind(this);
+            mergeCssCoverage = mergeCssCoverage.bind(this);
             console.log(cssCoverageHandle);
             await delay(2000);
             await xhrWatcher.waitForNetworkIdle();
             await page.mouse.click(0, 0);
-            testAction.setOption({
-                page,
-                xhrWatcher,
-                mergeCssCoverage,
-                isMobile:true
-            });
-            /* const allSimpleActions =  testAction.getHFCActions();
+
+            // action start
+            if (this.config.action) {
+                this.config.action.setOption({
+                    page,
+                    xhrWatcher,
+                    mergeCssCoverage,
+                    isMobile: true
+                });
+                /* const allSimpleActions =  this.config.action.getHFCActions();
             await asyncForEach(allSimpleActions, async eachProgress => {
                 console.log(eachProgress);
                 await eachProgress();
@@ -193,66 +203,32 @@ class UnusedCss {
                 xhrWatcher
             }); */
 
-            if (!this.actionFinished) {
-                 await typeAheadAction({
-                    page,
-                    xhrWatcher,
-                    mergeCssCoverage,
-                    mobile:true
-                }); 
-               /*  const allSimpleActions = testAction.getHFCActions();
+                if (!this.actionFinished) {
+                    await typeAheadAction({
+                        page,
+                        xhrWatcher,
+                        mergeCssCoverage,
+                        mobile: true
+                    });
+                    /*  const allSimpleActions = this.config.action.getHFCActions();
                 await asyncForEach(allSimpleActions, async eachProgress => {
                     console.log(eachProgress);
                     await eachProgress();
                 }); */
 
-                await testAction.runStepSequenceActions(true);
-                this.actionFinished = true;
-            }
+                    await this.config.action.runStepSequenceActions(true);
+                    this.actionFinished = true;
+                }
 
-            //  const css_coverage: puppeteer.CoverageEntry[] = await page.coverage.stopCSSCoverage();
+                //  const css_coverage: puppeteer.CoverageEntry[] = await page.coverage.stopCSSCoverage();
 
-            /*    let report = util.inspect(css_coverage, {
+                /*    let report = util.inspect(css_coverage, {
                 showHidden: false,
                 depth: null
             }); */
-
+            }
             await mergeCssCoverage(false);
-            /*   css_coverage.forEach(coverageEntry => {
-                if (
-                    cssList.some(cssFileWildCard => {
-                        const result = micromatch.isMatch(
-                            new URL(coverageEntry.url).pathname,
-                            cssFileWildCard
-                        );
-                        if (result) {
-                            console.log(
-                                '\x1b[36m%s\x1b[0m',
-                                'find Css file in list:',
-                                coverageEntry.url,
-                                cssFileWildCard
-                            );
-                        }
-                        return result;
-                    })
-                ) {
-                    if (this.AllCoverageEntryList) {
-                        if (
-                            this.AllCoverageEntryList[coverageEntry.url] ===
-                            undefined
-                        ) {
-                            this.AllCoverageEntryList[
-                                coverageEntry.url
-                            ] = new AllCssCoverage(coverageEntry);
-                        } else {
-                            this.AllCoverageEntryList[coverageEntry.url].add(
-                                coverageEntry
-                            );
-                        }
-                    }
-                }
-            });
- */
+            
             await page.close();
         };
 
@@ -276,5 +252,10 @@ class UnusedCss {
     }
 }
 //4294967296
-const unUsedCss = new UnusedCss();
+const unUsedCss = new UnusedCss({
+    pageUrlList: searchAreaPageUrlList,
+    cssList: searchAreaCssList,
+    fileName: 'crate-xs-us-qa',
+    action: testAction
+});
 unUsedCss.run();

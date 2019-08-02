@@ -9,5 +9,6 @@
         "polyfill",
         "requestfailed",
         "requestfinished"
-    ]
+    ],
+    "workbench.colorCustomizations": {}
 }

@@ -24,6 +24,12 @@ export const allChildSelector = (
         .map(selector => `${parentSelector.trim()} ${selector.trim()}`)
         .join(',');
 };
+
+/**
+ * @description  Create a new action for to focus all the child dom
+ * @param {String} parentSelector
+ * @returns
+ */
 export const allFocusAbleChild = (parentSelector: String) => {
     return allChildSelector(
         parentSelector,
