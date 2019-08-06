@@ -2,7 +2,7 @@ node_modules/**
 dist/**
 export/**
 example/**
+backup/**
 
 
-example/config.ts
-export/unusedCss/crate-md-us.css
+backup/qa/crate-md-qa.css
