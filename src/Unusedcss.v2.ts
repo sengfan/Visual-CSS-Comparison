@@ -2,7 +2,7 @@
  * @Author: Zhou Fang
  * @Date: 2019-06-28 15:51:36
  * @Last Modified by: Zhou Fang
- * @Last Modified time: 2019-08-01 09:12:29
+ * @Last Modified time: 2019-08-02 15:59:10
  */
 
 import * as puppeteer from 'puppeteer';
@@ -65,6 +65,7 @@ export class UnusedCss {
             pageUrlList: string[];
             cssList: string[];
             fileName: string;
+            device?: Devices.Device;
             action?: Actions;
         }
     ) {}
@@ -114,7 +115,7 @@ export class UnusedCss {
         const eachPageProcedure = async (
             url: string,
             cssList: string[],
-            device: Devices.Device = Devices['iPhone 6']
+            device: Devices.Device = this.config.device
         ) => {
             const page = await browser.newPage();
             const xhrWatcher = new XhrWatcher(page);
@@ -193,30 +194,26 @@ export class UnusedCss {
                     mergeCssCoverage,
                     isMobile: true
                 });
-                /* const allSimpleActions =  this.config.action.getHFCActions();
-            await asyncForEach(allSimpleActions, async eachProgress => {
-                console.log(eachProgress);
-                await eachProgress();
-            });
-            await typeAheadAction({
-                page,
-                xhrWatcher
-            }); */
-
+                const allSimpleActions = this.config.action.getHFCActions();
+                await asyncForEach(allSimpleActions, async eachProgress => {
+                    console.log(eachProgress);
+                    await eachProgress();
+                });
+       
                 if (!this.actionFinished) {
-                    await typeAheadAction({
-                        page,
-                        xhrWatcher,
-                        mergeCssCoverage,
-                        mobile: true
-                    });
                     /*  const allSimpleActions = this.config.action.getHFCActions();
                 await asyncForEach(allSimpleActions, async eachProgress => {
                     console.log(eachProgress);
                     await eachProgress();
                 }); */
 
-                    await this.config.action.runStepSequenceActions(true);
+                    await this.config.action.runStepSequenceActions(false);
+                    await typeAheadAction({
+                        page,
+                        xhrWatcher,
+                        mergeCssCoverage
+                        //  mobile: true
+                    });
                     this.actionFinished = true;
                 }
 
@@ -228,7 +225,7 @@ export class UnusedCss {
             }); */
             }
             await mergeCssCoverage(false);
-            
+
             await page.close();
         };
 
@@ -255,7 +252,8 @@ export class UnusedCss {
 const unUsedCss = new UnusedCss({
     pageUrlList: searchAreaPageUrlList,
     cssList: searchAreaCssList,
-    fileName: 'crate-xs-us-qa',
+    fileName: 'crate-md-us-qa',
+    device: undefined,
     action: testAction
 });
 unUsedCss.run();

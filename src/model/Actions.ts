@@ -1,8 +1,8 @@
 /*
  * @Author: Zhou Fang
  * @Date: 2019-07-20 21:06:56
- * @Last Modified by:   Zhou Fang
- * @Last Modified time: 2019-08-01 10:06:56
+ * @Last Modified by: Zhou Fang
+ * @Last Modified time: 2019-08-02 17:42:47
  */
 import { defer, merge, of } from 'rxjs';
 import { Page, ElementHandle } from 'puppeteer';
@@ -22,8 +22,20 @@ class SimpleStep {
         public actionMethod: ActionMethod,
         public pageNavigation = false,
         public queryAll = false,
-        public followSteps?: StepSequence
+        public followSteps?: StepSequence,
+        public delay?: number
     ) {}
+}
+class DelayStep extends SimpleStep {
+    selector;
+    actionMethod = ActionMethod.delay;
+    constructor(
+        public time = 1000,
+        public followSteps?: StepSequence,
+        selector = null
+    ) {
+        super(selector, ActionMethod.hover);
+    }
 }
 class HoverStep extends SimpleStep {
     constructor(public selector: string, public followSteps?: StepSequence) {
@@ -73,9 +85,8 @@ class TypeStep extends SimpleStep {
 
 type StepSequence = Map<
     string,
-    SimpleStep | HoverStep | ClickStep | FocusStep | TypeStep
+    SimpleStep | HoverStep | ClickStep | FocusStep | TypeStep | DelayStep
 >;
-
 
 export class Actions {
     hoverSelectors: Selectors = {};
@@ -332,6 +343,9 @@ export class Actions {
                 await page.keyboard.type(value, {
                     delay: delay
                 });
+            } else if ((<DelayStep>step).actionMethod === ActionMethod.delay) {
+                console.log('delay');
+                await delay((<DelayStep>step).time);
             }
         }
     }
@@ -487,7 +501,7 @@ const favAction = new Map()
             'div.product-details-wrapper .product-info button .icon.svg-icon-heart-outline'
         )
     )
-    .set('close Store popup', new ClickStep('#popup-close'));
+    .set('close Store popup', new TapStep('#popup-close'));
 
 export const testAction = new Actions();
 testAction.hoverSelectors = desktopHeaderMenuAction.selector;
@@ -534,6 +548,10 @@ const mobileHeaderAction: StepSequence = new Map()
             '#main-menu-container > div.menu-tabs > div.menu-tab.kids-tab > button',
             false
         )
+    )
+    .set(
+        'close menu',
+        new ClickStep('#main-menu-container #nav-header-toggle-icon', false)
     );
 const mobileFilterAction = new Map().set(
     'open popup',
@@ -577,14 +595,21 @@ const mobileFavAction = new Map()
     .set(
         'click fav again',
         new ClickStep(
-            'div.product-details-wrapper .product-info button .icon.svg-icon-heart-outline'
+            'div.spillContent > div:nth-child(1) > ul > li:nth-child(1) > div.product-details-wrapper > div > button',
+            false,
+            false
         )
     )
-    .set('close Store popup', new ClickStep('#popup-close'));
+    .set('wait again', new DelayStep(5000))
+    .set(
+        'close Store popup again',
+        new TapStep('#global-popup .popup-close', false, false)
+    )
+    .set('wait again3', new DelayStep(5000));
 
 testAction.stepSequencesMobileActions.push(
-    focusAction,
     mobileFavAction,
+    focusAction,
     mobileFilterAction,
     mobileHeaderAction
 );

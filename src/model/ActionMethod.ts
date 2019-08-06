@@ -3,5 +3,6 @@ export enum ActionMethod {
     focus = 'focus',
     click = 'click',
     type = 'type',
-    tap = 'tap'
+    tap = 'tap',
+    delay = 'delay'
 }

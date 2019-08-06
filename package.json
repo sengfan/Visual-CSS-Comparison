@@ -1,36 +1,37 @@
 {
-  "name": "visual-css-comparison",
-  "version": "0.0.1",
-  "description": "Replace css with local file then do the screenshot comparison",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "log-timestamp": "^0.3.0",
-    "md5": "^2.2.1",
-    "micromatch": "^4.0.2",
-    "moment": "^2.24.0",
-    "puppeteer": "^1.18.0",
-    "puppeteer-core": "^1.18.1",
-    "rxjs": "^6.5.2",
-    "timestamp-nano": "^1.0.0",
-    "ts-polyfill": "^3.5.1",
-    "uncss": "^0.17.0"
-  },
-  "devDependencies": {
-    "@types/micromatch": "^3.1.0",
-    "@types/node": "^12.0.10",
-    "@types/puppeteer": "^1.12.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sengfan/Visual-CSS-Comparison.git"
-  },
-  "author": "Zhou Fang, sengfan@gmail.com",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sengfan/Visual-CSS-Comparison/issues"
-  },
-  "homepage": "https://github.com/sengfan/Visual-CSS-Comparison#readme"
+    "name": "visual-css-comparison",
+    "version": "0.0.1",
+    "description": "Replace css with local file then do the screenshot comparison",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "browse": "node .\\dist\\example\\browserteam\\SuperCategories.js"
+    },
+    "dependencies": {
+        "log-timestamp": "^0.3.0",
+        "md5": "^2.2.1",
+        "micromatch": "^4.0.2",
+        "moment": "^2.24.0",
+        "puppeteer": "^1.18.0",
+        "puppeteer-core": "^1.18.1",
+        "rxjs": "^6.5.2",
+        "timestamp-nano": "^1.0.0",
+        "ts-polyfill": "^3.5.1",
+        "uncss": "^0.17.0"
+    },
+    "devDependencies": {
+        "@types/micromatch": "^3.1.0",
+        "@types/node": "^12.0.10",
+        "@types/puppeteer": "^1.12.4"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sengfan/Visual-CSS-Comparison.git"
+    },
+    "author": "Zhou Fang, sengfan@gmail.com",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/sengfan/Visual-CSS-Comparison/issues"
+    },
+    "homepage": "https://github.com/sengfan/Visual-CSS-Comparison#readme"
 }

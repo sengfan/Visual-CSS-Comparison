@@ -59,6 +59,13 @@
             "name": "Launch merge",
             "program": "${workspaceFolder}\\dist\\src\\Unusedcss.v2.js"
         },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "browse",
+            "program": "${workspaceFolder}\\dist\\example\\browserteam\\SuperCategories.js"
+        },
+
 
 
     ]

@@ -7,6 +7,6 @@
         "sourceMap": true,
         "downlevelIteration": true
     },
-    "include": ["src/**/*"],
+    "include": ["src/**/*", "example/browserteam"],
     "exclude": ["node_modules"]
 }
